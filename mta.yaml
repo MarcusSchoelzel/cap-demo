@@ -142,4 +142,5 @@ build-parameters:
   - builder: custom
     commands:
     - npm install --production
+    - npx tsc
     - npx -p @sap/cds-dk cds build --production
