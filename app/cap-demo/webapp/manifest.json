@@ -65,7 +65,8 @@
             "minUI5Version": "1.76.0",
             "libs": {
                 "sap.ui.core": {},
-                "sap.fe.templates": {}
+                "sap.fe.templates": {},
+                "sap.f": {}
             }
         },
         "models": {
@@ -89,12 +90,17 @@
                 {
                     "pattern": ":?query:",
                     "name": "BooksList",
-                    "target": "BooksList"
+                    "target": [
+                        "BooksList"
+                    ]
                 },
                 {
                     "pattern": "Books({key}):?query:",
                     "name": "BooksObjectPage",
-                    "target": "BooksObjectPage"
+                    "target": [
+                        "BooksList",
+                        "BooksObjectPage"
+                    ]
                 }
             ],
             "targets": {
@@ -112,9 +118,12 @@
                                         "route": "BooksObjectPage"
                                     }
                                 }
-                            }
+                            },
+                            "initialLoad": "Enabled"
                         }
-                    }
+                    },
+                    "controlAggregation": "beginColumnPages",
+                    "contextPattern": ""
                 },
                 "BooksObjectPage": {
                     "type": "Component",
@@ -125,13 +134,28 @@
                             "editableHeaderContent": false,
                             "entitySet": "Books"
                         }
-                    }
+                    },
+                    "controlAggregation": "midColumnPages",
+                    "contextPattern": "/Books({key})"
                 }
+            },
+            "config": {
+                "flexibleColumnLayout": {
+                    "defaultTwoColumnLayoutType": "TwoColumnsBeginExpanded",
+                    "defaultThreeColumnLayoutType": "ThreeColumnsMidExpanded"
+                },
+                "routerClass": "sap.f.routing.Router"
             }
         },
         "contentDensities": {
             "compact": true,
             "cozy": true
+        },
+        "rootView": {
+            "viewName": "sap.fe.templates.RootContainer.view.Fcl",
+            "type": "XML",
+            "async": true,
+            "id": "appRootView"
         }
     },
     "sap.platform.abap": {
