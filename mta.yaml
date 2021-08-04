@@ -8,6 +8,7 @@ modules:
   path: gen/srv
   requires:
   - name: cap-demo-db
+  - name: cap-demo-uaa
   provides:
   - name: srv-api
     properties:
@@ -45,7 +46,63 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: cap-demo-destination-content
+  type: com.sap.application.content
+  build-parameters:
+    no-source: true
+  requires:
+    - name: cap-demo-dest-srv
+      parameters:
+        content-target: true
+    - name: cap-demo-repo-host
+      parameters:
+        service-key:
+          name: cap-demo-repo-host-key
+    - name: cap-demo-uaa
+      parameters:
+        service-key:
+          name: cap-demo-uaa-key
+    - name: srv-api
+  parameters:
+    content:
+      subaccount:
+        existing_destinations_policy: update
+        destinations:
+          - Name: cap-demo-repo-host
+            ServiceInstanceName: cap-demo-html5-srv
+            ServiceKeyName: cap-demo-repo-host-key
+            sap.cloud.service: my.capdemo
+          - Name: cap-demo-uaa
+            Authentication: OAuth2UserTokenExchange
+            ServiceInstanceName: cap-demo-uaa
+            ServiceKeyName: cap-demo-uaa-key
+            sap.cloud.service: my.capdemo
+          - Name: srv-api
+            URL: ~{srv-api/srv-url}
+            Authentication: OAuth2UserTokenExchange
+            TokenServiceInstanceName: cap-demo-uaa
+            TokenServiceKeyName: cap-demo-uaa-key
 resources:
+- name: cap-demo-uaa
+  type: org.cloudfoundry.managed-service
+  properties:
+    XSAPPNAME: cap-demo
+  parameters:
+    service: xsuaa
+    service-plan: application
+    config:
+      xsappname: cap-demo
+      tenant-mode: dedicated
+      scopes:
+        - name: "$XSAPPNAME.user"
+      role-templates:
+        - name: user
+          scope-references:
+            - "$XSAPPNAME.user"
+      role-collections:
+        - name: cap-demo-user
+          role-template-references:
+            - $XSAPPNAME.user
 - name: cap-demo-db
   type: com.sap.xs.hdi-container
   parameters:

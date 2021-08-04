@@ -6,6 +6,11 @@ default-*.json
 gen/
 node_modules/
 target/
+dist/
+resources/
+*.mta
+srv/*.js
+*.js.map
 
 # Web IDE, App Studio
 .che/

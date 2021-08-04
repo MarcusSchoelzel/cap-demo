@@ -1,5 +1,9 @@
 {
     "_version": "1.32.0",
+    "sap.cloud": {
+        "public": true,
+        "service": "my.capdemo"
+    },
     "sap.app": {
         "id": "capdemo",
         "type": "application",
