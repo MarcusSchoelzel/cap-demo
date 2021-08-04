@@ -1,12 +1,16 @@
 using CatalogService as service from '../../srv/cat-service';
 
 annotate service.Books with @UI : {
-    HeaderInfo : {
+    HeaderInfo       : {
         $Type          : 'UI.HeaderInfoType',
         TypeName       : '{i18n>book}',
         TypeNamePlural : '{i18n>books}',
+        Title          : {
+            $Type : 'UI.DataField',
+            Value : ID,
+        },
     },
-    LineItem   : [
+    LineItem         : [
         {
             $Type : 'UI.DataField',
             Value : ID,
@@ -20,4 +24,21 @@ annotate service.Books with @UI : {
             Value : stock,
         },
     ],
+    FieldGroup #data : {
+        $Type : 'UI.FieldGroupType',
+        Data  : [
+            {
+                $Type : 'UI.DataField',
+                Value : title,
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : stock,
+            },
+        ],
+    },
+    Facets           : [{
+        $Type  : 'UI.ReferenceFacet',
+        Target : '@UI.FieldGroup#data',
+    }, ],
 };
